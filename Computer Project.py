@@ -15,7 +15,7 @@ def login():
     check=crs.fetchall()
     for i in check:
         if i[0]==str(passs):
-            print("k")
+            mainmenu(user)
 def register():
     user=input("Enter your Username: ")
     passs=input("Enter your Password: ")
@@ -27,6 +27,11 @@ def register():
     else:
         print("Recheck Failed, Retry!")
         register()
+def chngpass(user):
+    chng=input("Enter the Password: ")
+    print(user)
+    crs.execute("update login set Pass='{}' where user='{}'".format(chng,user))
+    cnx.commit()
      
 def menu():
     print('\n'*10)
@@ -45,4 +50,20 @@ def menu():
         print("Returning to menu.....")
         time.sleep(3)
         menu()
+def mainmenu(user):
+    print('\n'*10)
+    print('+'*102)
+    print() 
+    print("MENU".center(185)) 
+    print() 
+    print("1.Crime Reporting".center(150),"2.History".center(150),"3.Change Password".center(150))
+    print('+'*102)
+    r=int(input("Enter your choice: "))
+    if r==1:
+        print("crime")
+    if r==2:
+        print("History")
+    if r==3:
+        print(user)
+        chngpass(user)
 startup()
