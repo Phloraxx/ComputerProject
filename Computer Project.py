@@ -327,7 +327,23 @@ def userdata():
             userdata() 
     else:
         admin()
-#def crimedata():  
+def crimedata():  
+    print('\n'*10)
+    print('+'*25)
+    print() 
+    print("USER DATA".center(25))
+    print('-'*25)
+    print("1.SHOW ALL REPORTS\n\n2.SEARCH BY CRIME\n\n3.SEARCH BY USER\n\n4.SEARCH BY REPORT NUMBER")
+    print('+'*25)
+    while True:
+        try:
+            k=int(input("Enter your choice: "))
+            break
+        except ValueError:
+            os.system('CLS')
+            print("Errored!.   Reconnecting....")
+            time.sleep(2)
+            crimedata()
         
 
 
