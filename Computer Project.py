@@ -46,10 +46,15 @@ def register():
         time.sleep(2)
         register()
 def chngpass(user):
-    chng=input("Enter the Password: ")
-    print(user)
-    crs.execute("update login set Pass='{}' where user='{}'".format(chng,user))
-    cnx.commit()
+        os.system('CLS')
+        usr=input("Enter the Password: ")
+        crs.execute("update login set pass='{}' where user='{}'".format(usr,x))
+        cnx.commit()
+        os.system('CLS')
+        print("Changing Password.....")
+        time.sleep(1)
+        print("Successfully Changed!")
+        time.sleep(2)
      
 def menu():
     os.system('CLS')
@@ -90,6 +95,10 @@ def mainmenu(user=7):
     check=crs.fetchall()
     if user==7:
         menu()
+    os.system('cls')
+    print("Logging in!")
+    time.sleep(1)
+    os.system('cls')
     print('\n'*10)
     print('+'*25)
     print() 
@@ -101,13 +110,15 @@ def mainmenu(user=7):
         if i[0]=="y":
             print("\n5.Admin Menu")
     print('+'*25)
-    try:
-        r=int(input("Enter your choice: "))
-    except ValueError:
-        os.system('CLS')
-        print("Errored!.   Reconnecting....")
-        time.sleep(2)
-        mainmenu()
+    while True:
+        try:
+            r=int(input("Enter your choice: "))
+            break
+        except ValueError:
+            os.system('CLS')
+            print("Errored!.   Reconnecting....")
+            time.sleep(2)
+            mainmenu()
     if r==1:
         crime()
     elif r==2:
@@ -138,13 +149,15 @@ def crime():
     print('-'*25)
     print("1.TRAFFIC\n\n2.ASSAULT\n\n3.THEFT\n\n4.CYBER\n\n5.TRAFFICKING\n\n6.DRUGS")
     print('+'*25)
-    try:
-        crime=int(input("Enter your choice: "))
-    except ValueError:
-        os.system('CLS')
-        print("Errored!.   Reconnecting....")
-        time.sleep(2)
-        menu()
+    while True:
+        try:
+            crime=int(input("Enter your choice: "))
+            break
+        except ValueError:
+            os.system('CLS')
+            print("Errored!.   Reconnecting....")
+            time.sleep(2)
+            mainmenu()
     if crime==1:
         crm="traffic"
     elif crime==2:
@@ -175,15 +188,152 @@ def crime():
 def admin():
     os.system('cls')
     print("Logging in!")
-    time.sleep(2)
+    time.sleep(1)
     os.system('cls')
     print('\n'*10)
     print('+'*25)
     print() 
     print("ADMIN MENU".center(25))
     print('-'*25)
-    print("1.SEARCH DATA\n\n2.SEARCH USER DATA")
+    print("1.USER DATA\n\n2.CRIME DATA")
     print('+'*25)
+    while True:
+        try:
+            r=int(input("Enter your choice: "))
+            break
+        except ValueError:
+            os.system('CLS')
+            print("Errored!.   Reconnecting....")
+            time.sleep(2)
+            mainmenu()
+    if r==1:
+        userdata()
+    if r==2:
+        crimedata()
+    else:
+        mainmenu()
+
+def userdata():
+    print('\n'*10)
+    print('+'*25)
+    print() 
+    print("USER DATA".center(25))
+    print('-'*25)
+    print("1.SHOW ALL USERS\n\n2.SEARCH BY USERNAME\n\n3.SEARCH BY PHONE NO\n\n4.CHANGE USERDATA")
+    print('+'*25)
+    while True:
+        try:
+            r=int(input("Enter your choice: "))
+            break
+        except ValueError:
+            os.system('CLS')
+            print("Errored!.   Reconnecting....")
+            time.sleep(2)
+            userdata()
+    if r==1:
+        crs.execute("select * from login")
+        check=crs.fetchall()
+        print("+--------------------------+\n")
+        for i in check:
+            print(" | User Number  : ",i[0],"\n | User Name    : ",i[1],"\n | Phone Number : ",i[3],"\n | Admin        : ",i[4],"\n")
+            print("+--------------------------+\n")
+        c=input("Enter To Continue")
+        userdata()
+    elif r==2:
+        c=input("Enter the UserName to search: ")
+        crs.execute("select * from login where user='{}'".format(c))
+        check=crs.fetchall()
+        print("+--------------------------+\n")
+        for i in check:
+            print(" | User Number  : ",i[0],"\n | User Name    : ",i[1],"\n | Phone Number : ",i[3],"\n | Admin        : ",i[4],"\n")
+            print("+--------------------------+\n")
+        c=input("Enter To Continue")
+        userdata()
+    elif r==3:
+        c=input("Enter the Phone No to search: ")
+        crs.execute("select * from login where phoneno={}".format(c))
+        check=crs.fetchall()
+        print("+--------------------------+\n")
+        for i in check:
+            print(" | User Number  : ",i[0],"\n | User Name    : ",i[1],"\n | Phone Number : ",i[3],"\n | Admin        : ",i[4],"\n")
+            print("+--------------------------+\n")
+        c=input("Enter To Continue")
+        userdata()
+    elif r==4:
+        print('\n'*10)
+        print('+'*25)
+        print() 
+        print("USER DATA".center(25))
+        print('-'*25)
+        print("1.CHANGE USERNAME\n\n2.CHANGE PASSWORD\n\n3.CHANGE ADMIN PRIVILAGES\n\n4.DELETE USER")
+        print('+'*25)
+        while True:
+            try:
+                k=int(input("Enter your choice: "))
+                break
+            except ValueError:
+                os.system('CLS')
+                print("Errored!.   Reconnecting....")
+                time.sleep(2)
+                userdata()
+        if k==1:
+            os.system('CLS')
+            chng=input("Enter the User to change: ")
+            print()
+            usr=input("Enter the UserName: ")
+            crs.execute("update login set user='{}' where user='{}'".format(usr,chng))
+            cnx.commit()
+            os.system('CLS')
+            print("Changing UserName.....")
+            time.sleep(1)
+            print("Successfully Changed!")
+            time.sleep(2)
+        elif k==2:
+            os.system('CLS')
+            chng=input("Enter the User to change: ")
+            print()
+            usr=input("Enter the Password: ")
+            crs.execute("update login set pass='{}' where user='{}'".format(usr,chng))
+            cnx.commit()
+            os.system('CLS')
+            print("Changing Password.....")
+            time.sleep(1)
+            print("Successfully Changed!")
+            time.sleep(2)
+        elif k==3:
+            os.system('CLS')
+            chng=input("Enter the User to change: ")
+            print()
+            usr=input("Change Admin Privilages: ")
+            crs.execute("update login set admin='{}' where user='{}'".format(usr,chng))
+            cnx.commit()
+            os.system('CLS')
+            print("Changing Privilages.....")
+            time.sleep(1)
+            print("Successfully Changed!")
+            time.sleep(2)
+        elif k==4:
+            os.system('CLS')
+            chng=input("Enter the User to DELETE: ")
+            print()
+            crs.execute("delete from login where user='{}'".format(chng))
+            cnx.commit()
+            os.system('CLS')
+            print("Deleting User.....")
+            time.sleep(1)
+            print("Successfully Deleted!")
+            time.sleep(2)         
+        else:
+            userdata() 
+    else:
+        admin()
+#def crimedata():  
+        
+
+
+    
+    
+
     
 startup()
 while  True:
