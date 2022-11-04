@@ -118,7 +118,7 @@ def mainmenu(user=7):
             os.system('CLS')
             print("Errored!.   Reconnecting....")
             time.sleep(2)
-            mainmenu()
+            mainmenu(user)
     if r==1:
         crime()
     elif r==2:
@@ -137,8 +137,7 @@ def mainmenu(user=7):
             if i[0]=="y":
                 admin()
     else:
-        g=input(":")
-        print(eval(g))
+        mainmenu(x)
 
 def crime():
     os.system('CLS')
@@ -157,7 +156,7 @@ def crime():
             os.system('CLS')
             print("Errored!.   Reconnecting....")
             time.sleep(2)
-            mainmenu()
+            mainmenu(x)
     if crime==1:
         crm="traffic"
     elif crime==2:
@@ -184,7 +183,7 @@ def crime():
     os.system('cls')
     print("Thank You For Your Service!")
     time.sleep(3)
-    mainmenu()
+    mainmenu(x)
 def admin():
     os.system('cls')
     print("Logging in!")
@@ -205,13 +204,13 @@ def admin():
             os.system('CLS')
             print("Errored!.   Reconnecting....")
             time.sleep(2)
-            mainmenu()
+            mainmenu(x)
     if r==1:
         userdata()
     if r==2:
         crimedata()
     else:
-        mainmenu()
+        mainmenu(x)
 
 def userdata():
     print('\n'*10)
@@ -333,7 +332,7 @@ def crimedata():
     print() 
     print("USER DATA".center(25))
     print('-'*25)
-    print("1.SHOW ALL REPORTS\n\n2.SEARCH BY CRIME\n\n3.SEARCH BY USER\n\n4.SEARCH BY REPORT NUMBER")
+    print("1.SHOW ALL REPORTS\n\n2.SEARCH BY CRIME\n\n3.SEARCH BY USER\n\n4.SEARCH BY CRIME NUMBER")
     print('+'*25)
     while True:
         try:
@@ -344,7 +343,50 @@ def crimedata():
             print("Errored!.   Reconnecting....")
             time.sleep(2)
             crimedata()
-        
+    if k==1:
+        crs.execute("select * from crime")
+        check=crs.fetchall()
+        print("+--------------------------------+\n")
+        for i in check:
+            print(" | Crime Number    : ",i[0],"\n | Crime           : ",i[1],"\n | Location        : ",i[2],"\n | Date            : ",i[3],"\n | Description     : ",i[4],"\n | User Reported   : ",i[5],"\n")
+            print("+--------------------------------+\n")
+        c=input("Enter To Continue")
+        crimedata()
+    elif k==2:
+        c=input("Enter the Crime to search: ")
+        crs.execute("select * from crime where crime='{}'".format(c))
+        check=crs.fetchall()
+        print("+--------------------------------+\n")
+        for i in check:
+            print(" | Crime Number    : ",i[0],"\n | Crime           : ",i[1],"\n | Location        : ",i[2],"\n | Date            : ",i[3],"\n | Description     : ",i[4],"\n | User Reported   : ",i[5],"\n")
+            print("+--------------------------------+\n")
+        c=input("Enter To Continue")
+        crimedata()
+    elif k==3:
+        c=input("Enter the User to search: ")
+        crs.execute("select * from crime where user='{}'".format(c))
+        check=crs.fetchall()
+        print("+--------------------------------+\n")
+        for i in check:
+            print(" | Crime Number    : ",i[0],"\n | Crime           : ",i[1],"\n | Location        : ",i[2],"\n | Date            : ",i[3],"\n | Description     : ",i[4],"\n | User Reported   : ",i[5],"\n")
+            print("+--------------------------------+\n")
+        c=input("Enter To Continue")
+        crimedata()
+    elif k==4:
+        c=input("Enter the Crime Number to search: ")
+        crs.execute("select * from crime where num='{}'".format(c))
+        check=crs.fetchall()
+        print("+--------------------------------+\n")
+        for i in check:
+            print(" | Crime Number    : ",i[0],"\n | Crime           : ",i[1],"\n | Location        : ",i[2],"\n | Date            : ",i[3],"\n | Description     : ",i[4],"\n | User Reported   : ",i[5],"\n")
+            print("+--------------------------------+\n")
+        c=input("Enter To Continue")
+        crimedata()
+    else:
+        crimedata()
+
+    
+
 
 
     
