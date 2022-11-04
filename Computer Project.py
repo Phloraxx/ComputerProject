@@ -7,13 +7,15 @@ today=date.today()
 cnx=c.connect(host="localhost",user="root",password="root",database="login")
 crs=cnx.cursor()
 def startup():
-    crs.execute("create table if not exists login (Num int(2) primary key AUTO_INCREMENT,User varchar(25),Pass varchar(12),Phoneno int(10),Admin varchar(1))")
+    crs.execute("create table if not exists login (Num int(2) primary key AUTO_INCREMENT,User varchar(25) unique,Pass varchar(12),Phoneno int(10),Admin varchar(1))")
     crs.execute("insert ignore into  login values(1,'root','root',100,'y')")
-    crs.execute("create table if not exists crime (Num int(2) primary key AUTO_INCREMENT,crime varchar(25),location varchar(12),Date DATE,description varchar(125),user varchar(25))")
+    crs.execute("create table if not exists crime (Num int(2) primary key AUTO_INCREMENT,Crime varchar(25),Location varchar(12),Date DATE,Description varchar(125),User varchar(25))")
     cnx.commit()
     menu()
 def login():
+    os.system('CLS')
     user=input("Enter your Username: ")
+    print()
     passs=input("Enter your Password: ")
     crs.execute("select pass from login where user='{}'".format(user))
     check=crs.fetchall()
@@ -59,14 +61,13 @@ def chngpass(user):
 def menu():
     os.system('CLS')
     print('\n'*10)
-    print('+'*25)
-    print() 
+    print("+--------------------------+\n") 
     print("MENU".center(25)) 
-    print('-'*25)
+    print('-'*28)
     print() 
     print("1.Login(Sign IN)\n".center(12))
     print("2.Register(Sign UP)           (3.exit)".center(12))
-    print('+'*25)
+    print("+--------------------------+\n")
     while True:
         try:
             r=int(input("Enter your choice: "))
@@ -99,17 +100,15 @@ def mainmenu(user=7):
     print("Logging in!")
     time.sleep(1)
     os.system('cls')
-    print('\n'*10)
-    print('+'*25)
-    print() 
+    print("+--------------------------+\n") 
     print("MAINMENU".center(25)) 
-    print('-'*25)
+    print('-'*28)
     print() 
     print("1.Crime Reporting\n\n2.History\n\n3.Change Password\n\n4.Logout")
     for i in check:
         if i[0]=="y":
             print("\n5.Admin Menu")
-    print('+'*25)
+    print("+--------------------------+\n")
     while True:
         try:
             r=int(input("Enter your choice: "))
@@ -122,7 +121,7 @@ def mainmenu(user=7):
     if r==1:
         crime()
     elif r==2:
-        print("History")
+        history()
     elif r==3:
         print(user)
         chngpass(user)
@@ -139,15 +138,25 @@ def mainmenu(user=7):
     else:
         mainmenu(x)
 
+def history():
+        crs.execute("select * from crime where user='{}'".format(x))
+        check=crs.fetchall()
+        print("+--------------------------------+\n")
+        for i in check:
+            print(" | Crime Number    : ",i[0],"\n | Crime           : ",i[1],"\n | Location        : ",i[2],"\n | Date            : ",i[3],"\n | Description     : ",i[4],"\n | User Reported   : ",i[5],"\n")
+            print("+--------------------------------+\n")
+        c=input("Enter To Continue")
+        mainmenu(x)
+
+
 def crime():
     os.system('CLS')
     print('\n'*10)
-    print('+'*25)
-    print() 
+    print("+--------------------------+\n") 
     print("TYPES OF CRIMES".center(25))
     print('-'*25)
     print("1.TRAFFIC\n\n2.ASSAULT\n\n3.THEFT\n\n4.CYBER\n\n5.TRAFFICKING\n\n6.DRUGS")
-    print('+'*25)
+    print("+--------------------------+\n")
     while True:
         try:
             crime=int(input("Enter your choice: "))
@@ -158,17 +167,17 @@ def crime():
             time.sleep(2)
             mainmenu(x)
     if crime==1:
-        crm="traffic"
+        crm="Traffic"
     elif crime==2:
-        crm="assault"
+        crm="Assault"
     elif crime==3:
-        crm="theft"
+        crm="Theft"
     elif crime==4:
-        crm="cyber"
+        crm="Cyber"
     elif crime==5:
-        crm="trafficking"
+        crm="Trafficking"
     elif crime==6:
-        crm="drugs"
+        crm="Drugs"
     #os.system('cls')
     print()
     loc=input("Enter the location of the crime: ")
@@ -190,12 +199,11 @@ def admin():
     time.sleep(1)
     os.system('cls')
     print('\n'*10)
-    print('+'*25)
-    print() 
+    print("+--------------------------+\n") 
     print("ADMIN MENU".center(25))
     print('-'*25)
     print("1.USER DATA\n\n2.CRIME DATA")
-    print('+'*25)
+    print("+--------------------------+\n")
     while True:
         try:
             r=int(input("Enter your choice: "))
@@ -213,13 +221,13 @@ def admin():
         mainmenu(x)
 
 def userdata():
+    os.system('cls')
     print('\n'*10)
-    print('+'*25)
-    print() 
+    print("+--------------------------+\n")
     print("USER DATA".center(25))
     print('-'*25)
     print("1.SHOW ALL USERS\n\n2.SEARCH BY USERNAME\n\n3.SEARCH BY PHONE NO\n\n4.CHANGE USERDATA")
-    print('+'*25)
+    print("+--------------------------+\n")
     while True:
         try:
             r=int(input("Enter your choice: "))
@@ -259,13 +267,13 @@ def userdata():
         c=input("Enter To Continue")
         userdata()
     elif r==4:
+        os.system('cls')
         print('\n'*10)
-        print('+'*25)
-        print() 
+        print("+--------------------------+\n")
         print("USER DATA".center(25))
         print('-'*25)
         print("1.CHANGE USERNAME\n\n2.CHANGE PASSWORD\n\n3.CHANGE ADMIN PRIVILAGES\n\n4.DELETE USER")
-        print('+'*25)
+        print("+--------------------------+\n")
         while True:
             try:
                 k=int(input("Enter your choice: "))
@@ -303,7 +311,7 @@ def userdata():
             os.system('CLS')
             chng=input("Enter the User to change: ")
             print()
-            usr=input("Change Admin Privilages: ")
+            usr=input("Change Admin Privilages(y/n): ")
             crs.execute("update login set admin='{}' where user='{}'".format(usr,chng))
             cnx.commit()
             os.system('CLS')
@@ -327,13 +335,13 @@ def userdata():
     else:
         admin()
 def crimedata():  
+    os.system('CLS')
     print('\n'*10)
-    print('+'*25)
-    print() 
-    print("USER DATA".center(25))
+    print("+--------------------------+\n")
+    print("CRIME DATA".center(25))
     print('-'*25)
     print("1.SHOW ALL REPORTS\n\n2.SEARCH BY CRIME\n\n3.SEARCH BY USER\n\n4.SEARCH BY CRIME NUMBER")
-    print('+'*25)
+    print("+--------------------------+\n")
     while True:
         try:
             k=int(input("Enter your choice: "))
@@ -383,7 +391,7 @@ def crimedata():
         c=input("Enter To Continue")
         crimedata()
     else:
-        crimedata()
+        admin()
 
     
 
