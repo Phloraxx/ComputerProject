@@ -1,17 +1,20 @@
-from venv import create
+#Imports and Startup definitions for Crime Reporting Software
 import mysql.connector as c
 import time
 import os
 from datetime import date
 today=date.today()
-cnx=c.connect(host="localhost",user="root",password="root",database="login")
+cnx=c.connect(host="localhost",user="root",password="root",charset="utf8")
 crs=cnx.cursor()
+crs.execute("create database if not exists login")
+crs.execute("use login")
 def startup():
     crs.execute("create table if not exists login (Num int(2) primary key AUTO_INCREMENT,User varchar(25) unique,Pass varchar(12),Phoneno int(10),Admin varchar(1))")
     crs.execute("insert ignore into  login values(1,'root','root',100,'y')")
     crs.execute("create table if not exists crime (Num int(2) primary key AUTO_INCREMENT,Crime varchar(25),Location varchar(12),Date DATE,Description varchar(125),User varchar(25))")
     cnx.commit()
     menu()
+#Login and Register purposes
 def login():
     os.system('CLS')
     user=input("Enter your Username: ")
@@ -91,6 +94,7 @@ def menu():
         print("Returning to menu.....")
         time.sleep(3)
         menu()
+#Mainmenu for all users to report crimes
 def mainmenu(user=7):
     crs.execute("select admin from login where user='{}'".format(user))
     check=crs.fetchall()
@@ -137,7 +141,7 @@ def mainmenu(user=7):
                 admin()
     else:
         mainmenu(x)
-
+#Shows all reported crime by the logged in user
 def history():
         crs.execute("select * from crime where user='{}'".format(x))
         check=crs.fetchall()
@@ -148,7 +152,7 @@ def history():
         c=input("Enter To Continue")
         mainmenu(x)
 
-
+#Crime reporting menu
 def crime():
     os.system('CLS')
     print('\n'*10)
@@ -193,6 +197,7 @@ def crime():
     print("Thank You For Your Service!")
     time.sleep(3)
     mainmenu(x)
+#Admin section 
 def admin():
     os.system('cls')
     print("Logging in!")
@@ -219,7 +224,7 @@ def admin():
         crimedata()
     else:
         mainmenu(x)
-
+#Records of user data
 def userdata():
     os.system('cls')
     print('\n'*10)
@@ -334,6 +339,7 @@ def userdata():
             userdata() 
     else:
         admin()
+#Records of crime data
 def crimedata():  
     os.system('CLS')
     print('\n'*10)
@@ -400,13 +406,13 @@ def crimedata():
     
     
 
-    
+#For error checking
 startup()
 while  True:
     try:
         x
         time.sleep(3)
-        mainmenu(x)
+        mainmenu(x) 
     except NameError:
         time.sleep(3)
         menu()
